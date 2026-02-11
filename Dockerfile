@@ -14,7 +14,7 @@ RUN dnf update -y && \
 
 # Create ansible user
 RUN useradd -m -s /bin/bash ansible && \
-    echo "ansible:stepit" | chpasswd && \
+    echo "ansible:ansible" | chpasswd && \
     echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible
 
 # SSH setup
