@@ -1,0 +1,34 @@
+- hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Run Oracle container with systemd
+      community.docker.docker_container:
+        name: oracle1
+        image: ghcr.io/bakhtiyar-ismayil/oracle-image:main
+        state: started
+        restart_policy: unless-stopped
+        privileged: true
+        cgroupns_mode: host
+        command: /sbin/init
+
+        capabilities:
+          - NET_ADMIN
+
+        devices:
+          - /dev/net/tun:/dev/net/tun
+
+        published_ports:
+          - "222:22"
+          - "8080:80"
+          - "8082:8082"
+          - "8084:8084"
+          - "10052:10050"
+
+        volumes:
+          - /sys/fs/cgroup:/sys/fs/cgroup:rw
+          - oracle_etc:/etc
+          - oracle_var:/var
+          - oracle_home:/home
+          - oracle_opt:/opt
